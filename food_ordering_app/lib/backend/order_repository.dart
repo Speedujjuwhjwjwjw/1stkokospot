@@ -16,41 +16,49 @@ class OrderRepository {
     String? customerEmail,
     String? paymentReference,
   }) async {
-    await SupabaseService.instance.client.from('orders').insert({
-      'order_code': orderCode,
-      'customer_email': customerEmail,
-      'address': address,
-      'payment_method': paymentMethod,
-      'status': status,
-      'payment_status': paymentStatus,
-      'subtotal': subtotal,
-      'delivery_fee': deliveryFee,
-      'total': total,
-      'payment_reference': paymentReference,
-      'items': entries
-          .map(
-            (entry) => {
-              'id': entry.item.id,
-              'name': entry.item.name,
-              'category': entry.item.category,
-              'image_url': entry.item.imageUrl,
-              'price': entry.item.price,
-              'quantity': entry.quantity,
-            },
-          )
-          .toList(),
-    });
+    try {
+      await SupabaseService.instance.client.from('orders').insert({
+        'order_code': orderCode,
+        'customer_email': customerEmail,
+        'address': address,
+        'payment_method': paymentMethod,
+        'status': status,
+        'payment_status': paymentStatus,
+        'subtotal': subtotal,
+        'delivery_fee': deliveryFee,
+        'total': total,
+        'payment_reference': paymentReference,
+        'items': entries
+            .map(
+              (entry) => {
+                'id': entry.item.id,
+                'name': entry.item.name,
+                'category': entry.item.category,
+                'image_url': entry.item.imageUrl,
+                'price': entry.item.price,
+                'quantity': entry.quantity,
+              },
+            )
+            .toList(),
+      });
+    } catch (e) {
+      throw Exception('Failed to create order: $e');
+    }
   }
 
   Future<List<Order>> fetchOrders() async {
-    final rows = await SupabaseService.instance.client
-        .from('orders')
-        .select()
-        .order('created_at', ascending: false);
+    try {
+      final rows = await SupabaseService.instance.client
+          .from('orders')
+          .select()
+          .order('created_at', ascending: false);
 
-    return (rows as List<dynamic>)
-        .map((row) => _mapOrder(row as Map<String, dynamic>))
-        .toList();
+      return (rows as List<dynamic>)
+          .map((row) => _mapOrder(row as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to fetch orders: $e');
+    }
   }
 
   Order _mapOrder(Map<String, dynamic> row) {

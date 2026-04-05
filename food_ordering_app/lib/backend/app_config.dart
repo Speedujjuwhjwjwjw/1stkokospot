@@ -1,8 +1,9 @@
-// --- HARDCODED SUPABASE CONFIG FOR DEPLOYMENT ---
-// If you want to use environment variables, set them in your build pipeline.
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+// --- SUPABASE CONFIG FROM ENVIRONMENT VARIABLES ---
 class AppConfig {
-  static const String supabaseUrl = 'https://tchhzdwdikfflmkeawau.supabase.co';
-  static const String supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjaGh6ZHdkaWtmZmxta2Vhd2F1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5OTY5MjAsImV4cCI6MjA5MDU3MjkyMH0.VvW46M_ezLxvCRBDKAH0qChFDwgNA0hYN3Z-LvKa634';
-  static const String paystackCallbackUrl = 'https://localhost/checkout/complete';
-  static const bool hasSupabase = true;
+  static String get supabaseUrl => dotenv.env['SUPABASE_URL']!;
+  static String get supabaseAnonKey => dotenv.env['SUPABASE_ANON_KEY']!;
+  static String get paystackCallbackUrl => dotenv.env['PAYSTACK_CALLBACK_URL']!;
+  static bool get hasSupabase => dotenv.env['HAS_SUPABASE'] == 'true';
 }

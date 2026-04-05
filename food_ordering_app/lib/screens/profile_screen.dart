@@ -238,7 +238,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       onChanged: onChanged,
       secondary: Icon(icon, size: 20, color: const Color(0xFF9E1B1B)),
       title: Text(label, style: const TextStyle(fontSize: 14)),
-      activeThumbColor: const Color(0xFF9E1B1B),
+      activeColor: const Color(0xFF9E1B1B),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
     );
   }

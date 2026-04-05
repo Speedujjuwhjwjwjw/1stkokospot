@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -211,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           itemCount: kCategories.length,
-          separatorBuilder: (_, _) => const SizedBox(width: 8),
+          separatorBuilder: (_, __) => const SizedBox(width: 8),
           itemBuilder: (context, index) {
             final cat = kCategories[index];
             final selected = cat == _category;
@@ -229,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   boxShadow: selected
                       ? [
                           BoxShadow(
-                            color: const Color(0xFF9E1B1B).withValues(alpha: 0.25),
+                            color: const Color(0xFF9E1B1B).withOpacity( 0.25),
                             blurRadius: 12,
                             offset: const Offset(0, 4),
                           ),
@@ -379,10 +380,11 @@ class _HeroSlide extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.network(
-            item.imageUrl,
+          CachedNetworkImage(
+            imageUrl: item.imageUrl,
             fit: BoxFit.cover,
-            errorBuilder: (_, _, _) => Container(
+            placeholder: (context, url) => Container(color: const Color(0xFFEFEFEF)),
+            errorWidget: (context, url, error) => Container(
               color: const Color(0xFFEFEFEF),
               child: Center(
                 child: Text(
@@ -512,10 +514,11 @@ class _GlassFoodCard extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-              child: Image.network(
-                item.imageUrl,
+              child: CachedNetworkImage(
+                imageUrl: item.imageUrl,
                 fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => Container(
+                placeholder: (context, url) => Container(color: const Color(0xFFF3F3F3)),
+                errorWidget: (context, url, error) => Container(
                   color: const Color(0xFFF3F3F3),
                   child: Center(
                     child: Text(
@@ -532,7 +535,7 @@ class _GlassFoodCard extends StatelessWidget {
                   gradient: LinearGradient(
                     colors: [
                       Colors.transparent,
-                      Colors.black.withValues(alpha: 0.65),
+                      Colors.black.withOpacity( 0.65),
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -551,9 +554,9 @@ class _GlassFoodCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(10, 9, 10, 9),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.16),
+                      color: Colors.white.withOpacity( 0.16),
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.34)),
+                      border: Border.all(color: Colors.white.withOpacity( 0.34)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -662,7 +665,7 @@ class _CartBar extends StatelessWidget {
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF9E1B1B).withValues(alpha: 0.35),
+              color: const Color(0xFF9E1B1B).withOpacity( 0.35),
               blurRadius: 16,
               offset: const Offset(0, 6),
             ),
@@ -673,7 +676,7 @@ class _CartBar extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
+                color: Colors.white.withOpacity( 0.2),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
@@ -760,7 +763,7 @@ class _CartSheet extends StatelessWidget {
                 controller: scrollController,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 itemCount: entries.length,
-                separatorBuilder: (_, _) => const Divider(height: 1),
+                separatorBuilder: (_, __) => const Divider(height: 1),
                 itemBuilder: (ctx, i) {
                   final e = entries[i];
                   return Padding(
@@ -769,12 +772,13 @@ class _CartSheet extends StatelessWidget {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(12),
-                          child: Image.network(
-                            e.item.imageUrl,
+                          child: CachedNetworkImage(
+                            imageUrl: e.item.imageUrl,
                             width: 52,
                             height: 52,
                             fit: BoxFit.cover,
-                            errorBuilder: (_, _, _) => Container(
+                            placeholder: (context, url) => Container(color: const Color(0xFFF3F3F3)),
+                            errorWidget: (context, url, error) => Container(
                               width: 52,
                               height: 52,
                               color: const Color(0xFFFFEFE5),

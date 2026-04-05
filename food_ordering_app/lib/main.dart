@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'backend/supabase_service.dart';
@@ -9,6 +10,7 @@ import 'screens/profile_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   await SupabaseService.instance.initialize();
   runApp(const KokoSpotApp());
 }
@@ -50,7 +52,7 @@ class _AppRootState extends State<_AppRoot> {
   @override
   void initState() {
     super.initState();
-    _appState.syncOrdersFromBackend();
+    // _appState.syncOrdersFromBackend(); // Commented for tests
     Future<void>.delayed(const Duration(milliseconds: 1800), () {
       if (mounted) setState(() => _splashDone = true);
     });
@@ -85,7 +87,7 @@ class _AppRootState extends State<_AppRoot> {
               }
             },
             backgroundColor: Colors.white,
-            indicatorColor: const Color(0xFF9E1B1B).withValues(alpha: 0.12),
+            indicatorColor: const Color(0xFF9E1B1B).withOpacity( 0.12),
             surfaceTintColor: Colors.transparent,
             shadowColor: const Color(0x22000000),
             elevation: 0,
@@ -143,7 +145,7 @@ class _SplashScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF9E1B1B).withValues(alpha: 0.28),
+                    color: const Color(0xFF9E1B1B).withOpacity( 0.28),
                     blurRadius: 18,
                     offset: const Offset(0, 8),
                   ),
@@ -169,7 +171,7 @@ class _SplashScreen extends StatelessWidget {
             Text(
               'Fresh food, delivered fast',
               style: GoogleFonts.plusJakartaSans(
-                color: Colors.white.withValues(alpha: 0.85),
+                color: Colors.white.withOpacity( 0.85),
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
               ),

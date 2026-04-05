@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../state.dart';
@@ -83,7 +84,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               width: 44,
                               height: 44,
                               fit: BoxFit.cover,
-                              errorBuilder: (_, _, _) => Container(
+                              errorBuilder: (__, ___, ____) => Container(
                                 width: 44,
                                 height: 44,
                                 color: const Color(0xFFFFEFE5),
@@ -282,6 +283,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   Future<void> _placeOrder() async {
+    if (Supabase.instance.client.auth.currentUser == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please log in to place an order.'),
+        ),
+      );
+      return;
+    }
+
     final email = _emailController.text.trim();
     final address = _addressController.text.trim();
     if (email.isEmpty || !email.contains('@')) {

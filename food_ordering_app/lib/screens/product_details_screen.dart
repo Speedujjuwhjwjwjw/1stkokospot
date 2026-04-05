@@ -41,7 +41,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         child: Image.network(
                           item.imageUrl,
                           fit: BoxFit.cover,
-                          errorBuilder: (_, _, _) => Container(
+                          errorBuilder: (__, ___, ____) => Container(
                             color: Colors.white,
                             alignment: Alignment.center,
                             child: Text(

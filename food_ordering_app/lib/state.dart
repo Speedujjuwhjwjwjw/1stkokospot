@@ -5,6 +5,10 @@ import 'backend/paystack_service.dart';
 import 'backend/supabase_service.dart';
 import 'menu_data.dart';
 
+enum OrderStatus { preparing, awaitingPayment, completed, cancelled }
+
+enum PaymentStatus { pending, paid, failed }
+
 class FoodItem {
   const FoodItem({
     required this.id,

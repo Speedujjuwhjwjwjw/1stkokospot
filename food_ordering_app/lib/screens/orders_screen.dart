@@ -79,7 +79,7 @@ class OrdersScreen extends StatelessWidget {
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.all(16),
                 itemCount: orders.length,
-                separatorBuilder: (_, _) => const SizedBox(height: 12),
+                separatorBuilder: (_, __) => const SizedBox(height: 12),
                 itemBuilder: (ctx, i) => _OrderCard(order: orders[i]),
               ),
       ),
@@ -123,7 +123,7 @@ class _OrderCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: statusColor.withValues(alpha: 0.12),
+                    color: statusColor.withOpacity( 0.12),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -154,7 +154,7 @@ class _OrderCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: paymentStatusColor.withValues(alpha: 0.12),
+                    color: paymentStatusColor.withOpacity( 0.12),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
