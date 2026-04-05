@@ -38,8 +38,15 @@ workflows:
           echo $SUPABASE_URL > .env.secret
           echo $SUPABASE_ANON_KEY >> .env.secret
           echo $PAYSTACK_CALLBACK_URL >> .env.secret
-          export JAVA_HOME=$(find /opt -name "javac" | xargs dirname | xargs dirname | head -1)
+          export JAVA_HOME=$(/usr/libexec/java_home -v 17 2>/dev/null || true)
           export JAVA_TOOL_OPTIONS="--add-opens=java.base/java.lang=ALL-UNNAMED"
+
+      - name: Print environment
+        script: |
+          cd food_ordering_app
+          echo "FLUTTER PATH: $(which flutter)"
+          flutter --version
+          java -version
 
       - name: Get dependencies
         script: |
