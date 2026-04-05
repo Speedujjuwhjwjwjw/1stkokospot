@@ -20,7 +20,7 @@ workflows:
         - pattern: develop
 
     environment:
-      flutter: "3.40.0"
+      flutter: stable
       vars:
         BUILD_NUMBER: 100
         KEYSTORE_PATH: /tmp/keystore.jks
@@ -111,7 +111,7 @@ workflows:
     name: iOS Build & Release
     instance_type: mac_mini_m1
     environment:
-      flutter: "3.41.6"
+      flutter: stable
       vars:
         PACKAGE_NAME: "com.kokospot.FoodOrderingApp"
     triggering:
