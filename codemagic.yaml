@@ -20,6 +20,7 @@ workflows:
         - pattern: develop
 
     environment:
+      flutter: "3.41.6"
       android_signing:
         - keystore_reference
       vars:
@@ -106,6 +107,8 @@ workflows:
     instance_type: mac_mini_m1
     environment:
       flutter: "3.41.6"
+      vars:
+        PACKAGE_NAME: "com.kokospot.FoodOrderingApp"
     triggering:
       events:
         - push
@@ -113,10 +116,6 @@ workflows:
       branch_patterns:
         - pattern: main
         - pattern: develop
-
-    environment:
-      vars:
-        PACKAGE_NAME: "com.kokospot.FoodOrderingApp"
 
     scripts:
       - name: Set up environment
