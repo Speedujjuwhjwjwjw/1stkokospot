@@ -79,9 +79,8 @@ workflows:
       events:
         - push
         - pull_request
-      branch:
-        include:
-          - main
+      branch_patterns:
+        - pattern: main
 
     scripts:
       - name: Set up environment
@@ -115,10 +114,9 @@ workflows:
       events:
         - push
         - pull_request
-      branch:
-        include:
-          - main
-          - develop
+      branch_patterns:
+        - pattern: main
+        - pattern: develop
 
     environment:
       ios_signing:
