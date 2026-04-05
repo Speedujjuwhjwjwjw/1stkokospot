@@ -1,9 +1,9 @@
 definitions:
   environment:
-    flutter: stable
+    flutter: 3.41.6
     xcode: latest
     cocoapods: default
-    java: 11
+    java: 17
 
 workflows:
   android-build:
