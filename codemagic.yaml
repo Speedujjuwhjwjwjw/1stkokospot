@@ -14,8 +14,8 @@ workflows:
         - push
         - pull_request
       branch_patterns:
-        - main
-        - develop
+        - pattern: main
+        - pattern: develop
 
     environment:
       android_signing:
