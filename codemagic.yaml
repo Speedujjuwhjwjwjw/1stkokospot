@@ -9,6 +9,8 @@ workflows:
   android-build:
     name: Android Build & Release
     instance_type: mac_mini_m1
+    environment:
+      flutter: "3.41.6"
     triggering:
       events:
         - push
@@ -69,6 +71,8 @@ workflows:
   web-build:
     name: Web Build
     instance_type: mac_mini_m1
+    environment:
+      flutter: "3.41.6"
     triggering:
       events:
         - push
@@ -100,6 +104,8 @@ workflows:
   ios-build:
     name: iOS Build & Release
     instance_type: mac_mini_m1
+    environment:
+      flutter: "3.41.6"
     triggering:
       events:
         - push
