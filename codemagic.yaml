@@ -103,10 +103,6 @@ workflows:
     artifacts:
       - food_ordering_app/build/web/**
 
-    publishing:
-      firebase:
-        firebase_token: $FIREBASE_TOKEN
-
   ios-build:
     name: iOS Build & Release
     instance_type: mac_mini_m1
