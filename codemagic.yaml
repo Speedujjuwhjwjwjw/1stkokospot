@@ -13,10 +13,9 @@ workflows:
       events:
         - push
         - pull_request
-      branch:
-        include:
-          - main
-          - develop
+      branch_patterns:
+        - main
+        - develop
 
     environment:
       android_signing:
