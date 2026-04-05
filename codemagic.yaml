@@ -27,7 +27,6 @@ workflows:
         KEY_ALIAS: $KEY_ALIAS
         KEY_PASSWORD: $KEY_PASSWORD
         PACKAGE_NAME: "com.kokospot.food_ordering_app"
-        PLAY_STORE_CREDENTIALS: $PLAY_STORE_CREDENTIALS
 
     scripts:
       - name: Set up environment
@@ -66,12 +65,6 @@ workflows:
     artifacts:
       - food_ordering_app/build/app/outputs/bundle/release/app-release.aab
       - food_ordering_app/build/app/outputs/flutter-apk/app-release.apk
-
-    publishing:
-      google_play:
-        credentials: $PLAY_STORE_CREDENTIALS
-        track: internal
-        submit_as_draft: true
 
   web-build:
     name: Web Build
