@@ -20,9 +20,7 @@ workflows:
         - pattern: develop
 
     environment:
-      flutter: "3.41.6"
-      android_signing:
-        - keystore_reference
+      flutter: "3.40.0"
       vars:
         BUILD_NUMBER: 100
         KEYSTORE_PATH: /tmp/keystore.jks
