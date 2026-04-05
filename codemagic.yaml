@@ -21,6 +21,7 @@ workflows:
       android_signing:
         - keystore_reference
       vars:
+        BUILD_NUMBER: 100
         KEYSTORE_PATH: /tmp/keystore.jks
         KEYSTORE_PASSWORD: $KEYSTORE_PASSWORD
         KEY_ALIAS: $KEY_ALIAS
