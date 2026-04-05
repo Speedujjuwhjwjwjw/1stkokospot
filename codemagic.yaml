@@ -56,16 +56,16 @@ workflows:
             --release \
             --build-number=$BUILD_NUMBER
 
-      - name: Build APK (Debug)
+      - name: Build APK (Release)
         script: |
           cd food_ordering_app
           flutter build apk \
-            --debug \
+            --release \
             --build-number=$BUILD_NUMBER
 
     artifacts:
       - food_ordering_app/build/app/outputs/bundle/release/app-release.aab
-      - food_ordering_app/build/app/outputs/apk/debug/app-debug.apk
+      - food_ordering_app/build/app/outputs/flutter-apk/app-release.apk
 
     publishing:
       google_play:
