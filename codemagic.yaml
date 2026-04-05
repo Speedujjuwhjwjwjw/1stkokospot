@@ -115,13 +115,8 @@ workflows:
         - pattern: develop
 
     environment:
-      ios_signing:
-        provisioning_profile_variable: APP_PROVISIONING_PROFILE
-        certificate_private_key_variable: APP_CERTIFICATE_PRIVATE_KEY
-        certificate_password_variable: APP_CERTIFICATE_PASSWORD
       vars:
         PACKAGE_NAME: "com.kokospot.FoodOrderingApp"
-        APP_STORE_CONNECT_CREDENTIALS: $APP_STORE_CONNECT_CREDENTIALS
 
     scripts:
       - name: Set up environment
@@ -145,10 +140,3 @@ workflows:
 
     artifacts:
       - food_ordering_app/build/ios/ipa/KokoSpot.ipa
-
-    publishing:
-      app_store_connect:
-        auth: $APP_STORE_CONNECT_CREDENTIALS
-        submit_for_review: false
-        beta_groups:
-          - testers
