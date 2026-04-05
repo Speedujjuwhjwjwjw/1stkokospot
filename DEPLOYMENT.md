@@ -38,10 +38,17 @@ In CodeMagic: **Settings** → **Environment variables**
 SUPABASE_URL=your_supabase_url
 SUPABASE_ANON_KEY=your_anon_key
 PAYSTACK_CALLBACK_URL=https://yourdomain.com/checkout/complete
-KEYSTORE_PASSWORD=your_keystore_password
-KEY_ALIAS=androiddebugkey
-KEY_PASSWORD=android
-BUILD_NUMBER=1
+KEYSTORE_PASSWORD=kokospot123
+KEY_ALIAS=koko_spot_key
+KEY_PASSWORD=kokospot123
+BUILD_NUMBER=100
+```
+
+### Android Package Name
+Use the same Android application ID that is in `android/app/build.gradle.kts`:
+
+```
+com.kokospot.food_ordering_app
 ```
 
 ### iOS Build Variables
@@ -49,7 +56,7 @@ BUILD_NUMBER=1
 SUPABASE_URL=your_supabase_url
 SUPABASE_ANON_KEY=your_anon_key
 PAYSTACK_CALLBACK_URL=https://yourdomain.com/checkout/complete
-APP_BUNDLE_ID=com.kokospot.FoodOrderingApp
+APP_BUNDLE_ID=com.kokospot.foodOrderingApp
 ```
 
 ---
