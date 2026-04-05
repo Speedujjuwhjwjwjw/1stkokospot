@@ -1,0 +1,161 @@
+definitions:
+  environment:
+    flutter: stable
+    xcode: latest
+    cocoapods: default
+    java: 11
+
+workflows:
+  android-build:
+    name: Android Build & Release
+    instance_type: mac_mini_m1
+    triggering:
+      events:
+        - push
+        - pull_request
+      branch:
+        include:
+          - main
+          - develop
+
+    environment:
+      android_signing:
+        - keystore_reference
+      vars:
+        KEYSTORE_PATH: /tmp/keystore.jks
+        KEYSTORE_PASSWORD: $KEYSTORE_PASSWORD
+        KEY_ALIAS: $KEY_ALIAS
+        KEY_PASSWORD: $KEY_PASSWORD
+        PACKAGE_NAME: "com.kokospot.food_ordering_app"
+        PLAY_STORE_CREDENTIALS: $PLAY_STORE_CREDENTIALS
+
+    scripts:
+      - name: Set up environment
+        script: |
+          cd food_ordering_app
+          echo $SUPABASE_URL > .env.secret
+          echo $SUPABASE_ANON_KEY >> .env.secret
+          echo $PAYSTACK_CALLBACK_URL >> .env.secret
+          export JAVA_HOME=$(find /opt -name "javac" | xargs dirname | xargs dirname | head -1)
+          export JAVA_TOOL_OPTIONS="--add-opens=java.base/java.lang=ALL-UNNAMED"
+
+      - name: Get dependencies
+        script: |
+          cd food_ordering_app
+          flutter pub get
+
+      - name: Run tests
+        script: |
+          cd food_ordering_app
+          flutter test
+
+      - name: Build AAB (Release)
+        script: |
+          cd food_ordering_app
+          flutter build appbundle \
+            --release \
+            --build-number=$BUILD_NUMBER
+
+      - name: Build APK (Debug)
+        script: |
+          cd food_ordering_app
+          flutter build apk \
+            --debug \
+            --build-number=$BUILD_NUMBER
+
+    artifacts:
+      - food_ordering_app/build/app/outputs/bundle/release/app-release.aab
+      - food_ordering_app/build/app/outputs/apk/debug/app-debug.apk
+
+    publishing:
+      google_play:
+        credentials: $PLAY_STORE_CREDENTIALS
+        track: internal
+        submit_as_draft: true
+
+  web-build:
+    name: Web Build
+    instance_type: mac_mini_m1
+    triggering:
+      events:
+        - push
+        - pull_request
+      branch:
+        include:
+          - main
+
+    scripts:
+      - name: Set up environment
+        script: |
+          cd food_ordering_app
+          echo "SUPABASE_URL=$SUPABASE_URL" > .env
+          echo "SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY" >> .env
+          echo "PAYSTACK_CALLBACK_URL=$PAYSTACK_CALLBACK_URL" >> .env
+
+      - name: Get dependencies
+        script: |
+          cd food_ordering_app
+          flutter pub get
+
+      - name: Build Web
+        script: |
+          cd food_ordering_app
+          flutter build web --release
+
+    artifacts:
+      - food_ordering_app/build/web/**
+
+    publishing:
+      firebase:
+        firebase_token: $FIREBASE_TOKEN
+
+  ios-build:
+    name: iOS Build & Release
+    instance_type: mac_mini_m1
+    triggering:
+      events:
+        - push
+        - pull_request
+      branch:
+        include:
+          - main
+          - develop
+
+    environment:
+      ios_signing:
+        provisioning_profile_variable: APP_PROVISIONING_PROFILE
+        certificate_private_key_variable: APP_CERTIFICATE_PRIVATE_KEY
+        certificate_password_variable: APP_CERTIFICATE_PASSWORD
+      vars:
+        PACKAGE_NAME: "com.kokospot.FoodOrderingApp"
+        APP_STORE_CONNECT_CREDENTIALS: $APP_STORE_CONNECT_CREDENTIALS
+
+    scripts:
+      - name: Set up environment
+        script: |
+          cd food_ordering_app
+          echo "SUPABASE_URL=$SUPABASE_URL" > .env
+          echo "SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY" >> .env
+          echo "PAYSTACK_CALLBACK_URL=$PAYSTACK_CALLBACK_URL" >> .env
+
+      - name: Get dependencies
+        script: |
+          cd food_ordering_app
+          flutter pub get
+
+      - name: Build iOS
+        script: |
+          cd food_ordering_app
+          flutter build ios \
+            --release \
+            --build-number=$BUILD_NUMBER
+
+    artifacts:
+      - food_ordering_app/build/ios/ipa/KokoSpot.ipa
+
+    publishing:
+      app_store_connect:
+        auth: $APP_STORE_CONNECT_CREDENTIALS
+        submit_for_review: false
+        beta_groups:
+          - testers
