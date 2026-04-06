@@ -30,7 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  google_fonts: ^8.0.2
+  google_fonts: ^6.3.0
   supabase_flutter: ^2.12.2
   url_launcher: ^6.0.0
 

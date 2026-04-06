@@ -1,20 +1,93 @@
+definitions:
+  environment:
+    flutter: 3.41.6
+    xcode: latest
+    cocoapods: default
+    java: 17
+
 workflows:
   android-build:
     name: Android Build & Release
     instance_type: mac_mini_m1
-    max_build_duration: 60
     environment:
-      flutter: stable
-      groups:
-        - keystore_credentials
-      vars:
-        PACKAGE_NAME: "com.kokospot.food_ordering_app"
+      flutter: "3.41.6"
     triggering:
       events:
         - push
         - pull_request
       branch_patterns:
         - pattern: main
+        - pattern: develop
+
+    environment:
+      flutter: "3.22.0"
+      android_signing:
+        - keystore_reference
+      vars:
+        BUILD_NUMBER: 100
+        KEYSTORE_PATH: /tmp/keystore.jks
+        KEYSTORE_PASSWORD: $KEYSTORE_PASSWORD
+        KEY_ALIAS: $KEY_ALIAS
+        KEY_PASSWORD: $KEY_PASSWORD
+        PACKAGE_NAME: "com.kokospot.food_ordering_app"
+
+    scripts:
+      - name: Set up environment
+        script: |
+          cd food_ordering_app
+          echo $SUPABASE_URL > .env.secret
+          echo $SUPABASE_ANON_KEY >> .env.secret
+          echo $PAYSTACK_CALLBACK_URL >> .env.secret
+          export JAVA_HOME=$(/usr/libexec/java_home -v 17 2>/dev/null || true)
+          export JAVA_TOOL_OPTIONS="--add-opens=java.base/java.lang=ALL-UNNAMED"
+
+      - name: Print environment
+        script: |
+          cd food_ordering_app
+          echo "FLUTTER PATH: $(which flutter)"
+          flutter --version
+          java -version
+
+      - name: Get dependencies
+        script: |
+          cd food_ordering_app
+          flutter pub get
+
+      - name: Run tests
+        script: |
+          cd food_ordering_app
+          flutter test
+
+      - name: Build AAB (Release)
+        script: |
+          cd food_ordering_app
+          flutter build appbundle \
+            --release \
+            --build-number=$BUILD_NUMBER
+
+      - name: Build APK (Release)
+        script: |
+          cd food_ordering_app
+          flutter build apk \
+            --release \
+            --build-number=$BUILD_NUMBER
+
+    artifacts:
+      - food_ordering_app/build/app/outputs/bundle/release/app-release.aab
+      - food_ordering_app/build/app/outputs/flutter-apk/app-release.apk
+
+  web-build:
+    name: Web Build
+    instance_type: mac_mini_m1
+    environment:
+      flutter: "3.41.6"
+    triggering:
+      events:
+        - push
+        - pull_request
+      branch_patterns:
+        - pattern: main
+
     scripts:
       - name: Set up environment
         script: |
@@ -22,21 +95,23 @@ workflows:
           echo "SUPABASE_URL=$SUPABASE_URL" > .env
           echo "SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY" >> .env
           echo "PAYSTACK_CALLBACK_URL=$PAYSTACK_CALLBACK_URL" >> .env
+
       - name: Get dependencies
         script: |
           cd food_ordering_app
           flutter pub get
-      - name: Build APK
+
+      - name: Build Web
         script: |
           cd food_ordering_app
-          flutter build apk --release
+          flutter build web --release
+
     artifacts:
-      - food_ordering_app/build/app/outputs/flutter-apk/*.apk
+      - food_ordering_app/build/web/**
 
   ios-build:
     name: iOS Build & Release
     instance_type: mac_mini_m1
-    max_build_duration: 60
     environment:
       flutter: stable
       vars:
@@ -47,6 +122,8 @@ workflows:
         - pull_request
       branch_patterns:
         - pattern: main
+        - pattern: develop
+
     scripts:
       - name: Set up environment
         script: |
@@ -54,43 +131,18 @@ workflows:
           echo "SUPABASE_URL=$SUPABASE_URL" > .env
           echo "SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY" >> .env
           echo "PAYSTACK_CALLBACK_URL=$PAYSTACK_CALLBACK_URL" >> .env
+
       - name: Get dependencies
         script: |
           cd food_ordering_app
           flutter pub get
+
       - name: Build iOS
         script: |
           cd food_ordering_app
-          flutter build ios --release --no-codesign
-    artifacts:
-      - food_ordering_app/build/ios/ipa/*.ipa
+          flutter build ios \
+            --release \
+            --build-number=$BUILD_NUMBER
 
-  web-build:
-    name: Web Build
-    instance_type: mac_mini_m1
-    max_build_duration: 30
-    environment:
-      flutter: stable
-    triggering:
-      events:
-        - push
-        - pull_request
-      branch_patterns:
-        - pattern: main
-    scripts:
-      - name: Set up environment
-        script: |
-          cd food_ordering_app
-          echo "SUPABASE_URL=$SUPABASE_URL" > .env
-          echo "SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY" >> .env
-          echo "PAYSTACK_CALLBACK_URL=$PAYSTACK_CALLBACK_URL" >> .env
-      - name: Get dependencies
-        script: |
-          cd food_ordering_app
-          flutter pub get
-      - name: Build Web
-        script: |
-          cd food_ordering_app
-          flutter build web --release
     artifacts:
-      - food_ordering_app/build/web/**
+      - food_ordering_app/build/ios/ipa/KokoSpot.ipa
